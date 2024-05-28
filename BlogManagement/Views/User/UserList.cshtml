@@ -1,0 +1,78 @@
+@using Entities
+<style>
+    .container {
+        width: 80%;
+        margin: auto;
+    }
+    .candidate-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .candidate-table th, .candidate-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .candidate-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+    .action-link {
+        color: #007BFF;
+        text-decoration: none;
+    }
+    .action-link:hover {
+        text-decoration: underline;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        color: #007BFF;
+    }
+    .pagination a:hover {
+        background-color: #ddd;
+    }
+</style>
+<div class="container">
+        <h2>Registered Users</h2>
+        <table class="candidate-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>CreatedOn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var candidate in Model.Items)
+                {
+                    <tr>
+                        <td>@candidate.FirstName&nbsp;@candidate.LastName</td>
+                        <td>@candidate.EmailId</td>
+                        <td>@candidate.CreatedOn.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="pagination">
+           @if (Model.TotalItems > Model.PageSize)
+            {
+                <ul class="pagination">
+                    @for (int i = 1; i <= Math.Ceiling((double)Model.TotalItems / Model.PageSize); i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link"
+                                href="@Url.Action("UserList", new { pageNo = i, pageSize = Model.PageSize, requestor = Model.Requestor})">@i</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+</div>
+
+

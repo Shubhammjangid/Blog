@@ -1,0 +1,330 @@
+@using Entities
+@{
+    string message = TempData["BlogAdded"] as string;
+    string toastClass = "success";
+    if(!string.IsNullOrWhiteSpace(message))
+    {
+        toastClass = message.Contains("Invalid") ? "error" : "success";
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .blog-item {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: antiquewhite;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-title {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+
+        .blog-content {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .publish-date {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: green;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 7px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btndis {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: red;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 7px;
+        }
+
+        .btndis:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination li {
+            margin-right: 5px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .pagination li a:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination li.active a {
+            background-color: #0056b3;
+        }
+
+        /* Toggle button styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin-top: 5px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(20px);
+            -ms-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+
+        .interactions .like,
+        .interactions .comment .interactions .edit-link {
+            margin: 10px;
+            font-size: 24px;
+        }
+
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #toast.error {
+            background-color: red;
+        }
+
+        #toast.success {
+            background-color: green;
+        }
+
+        #toast.show {
+            opacity: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div id="toast" class="show @toastClass">
+           @message
+        </div>
+    }
+    <div class="container">
+        <div class="blog-grid">
+            @foreach (var blog in Model.Items)
+            {
+                <div class="blog-item">
+
+                    <h2 class="blog-title">@blog.Title</h2>
+                    <p class="blog-content">@blog.Content</p>
+                    <p>Author: @blog.Author</p>
+                    <p class="publish-date">Published on: @blog.CreatedDate.ToShortDateString()</p>
+                    <a class="page-link"
+                        href="@Url.Action("BlogDetail", new { Id = @blog.Id + 169999, Author = @blog.Author, Title = @blog.Title, Category = @blog.Category, Content = @blog.Content, CreatedDate = @blog.CreatedDate, CreatedById = @blog.CreatedById})">View
+                        detail</a>
+
+                    @if (Model.Requestor.Role.Name != Constants.Keys.ADMIN)
+                    {
+                        if (blog.IsApprovedByAdmin)
+                        {
+                            <div class="interactions">
+                                <a class="edit-link" href="@Url.Action("Edit", "Blog", new { id = @blog.Id })">&#9998;</a>
+                                <a class="like"
+                                    href="@Url.Action("AddLike", new { blogId = @blog.Id, requestor = @Model.Requestor})">@blog.Likes
+                                    &#x1F44D;</a>
+                            </div>
+                        }
+                    }
+                    @if (Model.Requestor.Role.Name == Constants.Keys.ADMIN)
+                    {
+                        if (!blog.IsApprovedByAdmin)
+                        {
+                            <a class="btn"
+                                href="@Url.Action("Approve", new { BlogId = blog.Id, IsApprovedByAdmin = true, requestor = Model.Requestor})">Approve</a>
+                            <a class="btndis"
+                                href="@Url.Action("Approve", new { BlogId = blog.Id, IsApprovedByAdmin = false, requestor = Model.Requestor})">Dis-Approve</a>
+                        }
+                    }
+                    else
+                    {
+                        @if (!blog.IsApprovedByAdmin)
+                        {
+                            if (!string.IsNullOrWhiteSpace(blog.ReasonForNotApproval))
+                            {
+                                <p style="color: red; margin-top: 5px;">Your blog is disapproved by admin</p>
+                            }
+                            else
+                            {
+                                <p style="color: red; margin-top: 5px;">Your blog is under review</p>
+                            }
+                        }
+                        else
+                        {
+                            <form method="post" action="@Url.Action("ActiveStatus", "Blog")">
+                                <input type="hidden" name="blogId" value="@blog.Id" />
+                                <input type="hidden" name="isActive" value="@blog.IsActive" />
+                                <button style="background-color: @blog.IsActive ? red : green" ;" type="submit"
+                                    class="toggle-button @(blog.IsActive ? "active" : "inactive")">
+                                    @if (blog.IsActive)
+                                    {
+                                        <span>De-Activate</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Activate</span>
+                                    }
+                                </button>
+                            </form>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (Model.TotalItems > Model.PageSize)
+    {
+        <ul class="pagination">
+            @for (int i = 1; i <= Math.Ceiling((double)Model.TotalItems / Model.PageSize); i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                        href="@Url.Action("BlogList", new { pageNo = i, pageSize = Model.PageSize, requestor = Model.Requestor})">@i</a>
+                </li>
+            }
+        </ul>
+    }
+
+    <script>
+        function toggleCommentInput(commentEmoji) {
+            var commentBar = commentEmoji.nextElementSibling;
+            if (commentBar.style.display === "none") {
+                commentBar.style.display = "block";
+            } else {
+                commentBar.style.display = "none";
+            }
+        }
+
+       
+        setTimeout(function () {
+            var toast = document.getElementById("toast");
+            toast.classList.remove("show");
+        }, 3000);
+    
+    </script>
+</body>
+
+
+</html>

@@ -1,0 +1,111 @@
+@using System.Security.Claims
+@model Entities.Models.Blog;
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        .publish-date {
+            color: #0d10ee;
+            font-size: 0.9em;
+        }
+        .edit-link
+        {
+            margin : 5px;
+            font-size: 20px;
+        }
+         .comment {
+        margin-bottom: 10px;
+        margin-top : 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .comment p {
+        margin: 5px 0;
+    }
+
+    .comment-date {
+        font-size: 0.8em;
+        color: #666;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>@Model.Title</h1>
+        <p>@Model.Content</p>
+        <p>Category - @Model.Category</p>
+        <p>Author - @Model.Author</p>
+        <p class="publish-date">Published on: @Model.CreatedDate.ToShortDateString()</p>
+        <a class="edit-link" href="@Url.Action("AddLike", new { blogId = @Model.Id})">@Model.Likes &#x1F44D;</a>
+        <span class="edit-link">&#x1F4AC;</span>
+        <a class="edit-link" onclick="toggleComments()">View Comments</a>
+
+        <div id="commentsSection" style="display: none;">
+            @foreach(var comment in @Model.BlogComment)
+            {
+                if(comment is not null && comment.CommentBy is not null)
+                {
+                    <div class="comment">
+                        <p><strong>@comment.CommentBy.FirstName&nbsp;@comment.CommentBy.LastName</strong></p>
+                        <p>@comment.Comment</p>
+                        <p class="comment-date">@comment.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                    </div>
+                }
+            }
+        </div>
+        @{
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if(claimsIdentity is not null)
+            {
+                int userId = int.Parse(claimsIdentity.Claims.FirstOrDefault(e => e.Type.Contains("userdata")).Value);
+                if(userId == Model.CreatedById)
+                {
+                    <a class="edit-link" href="@Url.Action("Edit", "Blog", new { id = Model.Id })">&#9998;</a>
+                }
+            }
+        }
+       
+    </div>
+<script>
+    function toggleComments() {
+        var commentsSection = document.getElementById("commentsSection");
+        
+        if (commentsSection.style.display === "none") {
+            commentsSection.style.display = "block";
+        } else {
+            commentsSection.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

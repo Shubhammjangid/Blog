@@ -1,0 +1,4 @@
+@model Entities.User;
+
+<h1>Hello @Model.FirstName + " " + @Model.LastName</h1>
+<button type="button" onclick="location.href='@Url.Action("Logout", "User")'">Logout</button>

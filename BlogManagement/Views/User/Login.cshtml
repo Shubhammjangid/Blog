@@ -1,0 +1,111 @@
+@model Entities.User
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Form</title>
+    <style>
+     
+        .wrapper {
+                display: grid;
+                place-items: center;
+            }
+        .login-container {
+            max-width: 360px;
+            width: 100%;
+            padding: 40px 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .login-container img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .signup-link {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+    <div class="wrapper">
+            <div class="login-container">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADACAMAAAB/Pny7AAAAe1BMVEX+vVkAAAD/wVv9wlyLZzD/xV3/x16GZC97XCvqsVPzvFl2WCn/yV9pTiSpfTvSnEmheDlPOxzfpk71uFaScDUlGw0MCAQ/Lxa5i0EcFQrrtlVVPx4sIQ/IlUbkrVHUokwVDwc4KRNjSSP/z2G/k0WZcTXInUrYqU+vhz+HEd+4AAADX0lEQVR4nO3Yi3KiMBQG4BAMmiZgNCChCIiXru//hJsTtMXO9rI7sy7u/N9MBSFO8zfkJJYxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDHwoUQX7cSSZLwv9+ZPxAngaDe2cY590k3hY59YHvOc9NNMQ0/znJiGhGzVhXb6unDpjZTLmF2UUTRppf37OU3xbNoQ6p+v07aNIqiD8Ow0yaqGpFFpP642b/jw1zV8tMwfL33d1O9C42Xd+3lN4Uwfbnxr5v8+dORkcrfnVn/Mn8SU5wyQxh3SGp/UJ+HES/1thSNb2Lu2cPfEMJkTLuvwzDBZBKHMJMcl0uYcyLo8PqYcSZbaXnoMrdS2vjSmjM++TDzo6n8zFnLECa2R6NSNTu3gpaek0pnZ2myrGkyb05VwB+NZVQUrmeT8FbNto0eqlm7GApWlL5omxfhdEE/KhqbaR8mpw/GX/+a+3gLU+RdGBm7f+1v2blR7+eLmzCblvNu5U+ab+yA7mO0zkQr47tb0HO0W7jTltKUVLiNU69hMkOVolmFJYfRAlpPZmCGMPl6Gdb13vd955ecXR6z+Li9DM8L5/H8Gma9pAKgnb9ZdO1qWsvnUJo5F8vRE7RqfbnSq+HNiZrZ2zBc07qUUmVLJ7SvuawzfhEZh5E+zKEe3oQ6HN+GYbwtLm3XEyrT15EJi2GY11SfnOB8XQ4X0jbmwr0Lww6XajCf0MBc1pllQ/M6qvxM2NLTVbofSzpW9PdXLz9c9D4MY1X4xHJCA3NTzaq5L82brnq7kp1GD99tGB1KxmwyCyYJdWpQmI7WGeHKaziThJXnGkaNwyQ0Wn0znbrs8SxVwTw78ueTUulT0pl9X2zr09FvxaTZb4tehTlj/N12narU+Q+Kni5NKosvunJgme8YndB2su26rg3by0RIf/4sqefhrg1th212uZxYmF/ihE5Ekzp9OBxoi3Pi48lOz+LiEbK8kmURVfs8p55vzqM9mDa+hJdTWmO+9jSa/2pUuLgMA6P/Xc/+AJf7y9eBnbKjYUioBvb2oQbGp4mdqlerOm1u/oVhZ76wmccaGCK0sJbrd99ZEq3fX3oUD/Y4AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8334CGgorhCLxUtUAAAAASUVORK5CYII=" alt="Logo" />
+        <h2>Welcome</h2>
+        <form action="@Url.Action("Login", "User")" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.EmailId)
+                @Html.TextBoxFor(model => model.EmailId, new { type = "email" })
+                @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password)
+                @Html.PasswordFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+        <a href="@Url.Action("Registration", "User")" class="signup-link">Don't have an account? Sign up</a>
+    </div>
+    </div>
+
+

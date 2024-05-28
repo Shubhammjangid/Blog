@@ -1,0 +1,58 @@
+@model Entities.User;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .profile-info {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .profile-item {
+            margin-bottom: 10px;
+        }
+        .profile-item label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-info">
+        <h1>Profile</h1>
+        <div class="profile-item">
+            <label for="first-name">First Name:</label>
+            <span id="first-name">@Model.FirstName</span>
+        </div>
+        <div class="profile-item">
+            <label for="last-name">Last Name:</label>
+            <span id="last-name">@Model.LastName</span>
+        </div>
+        <div class="profile-item">
+            <label for="email">Email Address:</label>
+            <span id="email">@Model.EmailId</span>
+        </div>
+        <div class="profile-item">
+            <label for="created-date">Account Created Date:</label>
+            <span id="created-date">@Model.CreatedOn.ToString("dd/MM/yyyy")</span>
+        </div>
+    </div>
+</body>
+</html>
+

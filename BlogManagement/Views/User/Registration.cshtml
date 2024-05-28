@@ -1,0 +1,80 @@
+@model Services.Dto.CreateNewUserRequest
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+       
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;            
+            width: 400px; /* Adjust the width as needed */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            display: block;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .field-validation-error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        @using (Html.BeginForm("Registration", "User", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+            <div>
+                <label for="FirstName">First Name:</label>
+                @Html.TextBoxFor(m => m.FirstName)
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+            <div>
+                <label for="LastName">Last Name:</label>
+                @Html.TextBoxFor(m => m.LastName)
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+            <div>
+                <label for="Email">Email:</label>
+                @Html.TextBoxFor(m => m.EmailId)
+                @Html.ValidationMessageFor(m => m.EmailId)
+            </div>
+            <div>
+                <label for="Password">Password:</label>
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+            <button type="submit">Register</button>
+        }
+    </div>
+</body>
+</html>
